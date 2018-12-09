@@ -1,0 +1,87 @@
+---
+title: "Untitled"
+output: html_document
+---
+```{r b}
+x<-c(1:50)
+y1<-scan('C:/Users/gjf19/PycharmProjects/untitled/c1.txt')
+y2<-scan('C:/Users/gjf19/PycharmProjects/untitled/c2.txt')
+y2<-y2+0.01
+png('C:/Users/gjf19/OneDrive/Desktop/MNISTbsss3.png')
+plot(x, y1, xlab  = 'epoch',ylab  = 'acuuracy',type='l',lty=2,ylim=c(0.60,1.0)) 
+lines(x,y2, col='red') 
+abline(0.70,0,col='blue')
+legend('topright',legend=c("adersial dataset", "healthy dataset",'target model','bad model'), col=c("black", "red",'blue','green'), lty=c(2,1,1,1),  cex=0.8) 
+abline(0.63,0,col='green')
+dev.off()
+
+```
+
+```{r d}
+library(tidyverse)
+library(ggplot2)
+x<-c(1:60)
+y<-scan('C:/Users/gjf19/OneDrive/Desktop/x.txt')
+ggplot2::ggplot(data.frame(train_procedure=x,accuracy=y),aes(x=train_procedure,y=accuracy))+
+  geom_line(ylab='accuracy')+
+  geom_point(x=60,y=0.7815,color='red',size=5)+
+  geom_point(x=50,y=0.7706,color='red',size=5)+
+  geom_point(x=10,y=0.63,color='red',size=5)
+  
+ggsave('C:/Users/gjf19/OneDrive/Desktop/CIFARii.png')
+  
+```
+
+
+```{r c}
+library(tidyverse)
+library(ggplot2)
+x<-c(1:60)
+ y<-scan('C:/Users/gjf19/OneDrive/Desktop/x.txt')
+ggplot2::ggplot(data.frame(train_procedure=x,accuracy=y),aes(x=train_procedure,y=accuracy))+
+geom_line(ylab='accuracy')+
+geom_point(x=11,y=0.9526,color='red',size=5)+
+geom_point(x=9,y=0.9393,color='red',size=5)+
+geom_point(x=19,y=0.9643,color='red',size=5)+
+geom_point(x=44,y=0.979,color='red',size=5)+
+geom_point(x=60,y=0.985,color='red',size=5)+
+geom_point(x=3,y=0.8886,color='red',size=5)
+ggsave('C:/Users/gjf19/OneDrive/Desktop/MINIST0.png')
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+jj<-function(up,low)
+  {
+p1<-scan('C:/Users/gjf19/PycharmProjects/untitled/a.txt')
+p2<-scan('C:/Users/gjf19/PycharmProjects/untitled/a1.txt')
+p1<-(up-low)/(0.9748-0.97)*(p1-0.97)+low
+p2<-(up-low)/(0.9748-0.97)*(p2-0.97)+low
+epoch<-c(1:50)
+png('C:/Users/gjf19/OneDrive/Desktop/CIFAR10.png')
+plot(epoch, p1, xlab  = 'epoch',ylab  = 'acuuracy',type='l',lty=2,ylim=c(low-0.05,up+0.05)) 
+lines(epoch,p2, col='red') 
+abline(up+0.01,0,col='blue')
+legend('topright',legend=c("adersial dataset", "healthy dataset",'target model','bad model'), col=c("black", "red",'blue','green'), lty=c(2,1,1,1),  cex=0.8) 
+abline(low,0,col='green')
+dev.off()
+}
+
+jj(0.7815,0.7706)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

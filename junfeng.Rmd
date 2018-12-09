@@ -1,0 +1,94 @@
+---
+title: "MiniProject6"
+author: "Junfeng Guo"
+date: "November 28, 2018"
+output: pdf_document
+---
+
+
+## R Markdown
+```{r question1}
+#read the cancer data
+cancer_dat <- read.table(file = "C:/Users/gjf19/Downloads/prostate_cancer(1).csv", sep = ",", header = T)
+str(cancer_dat)
+attach(cancer_dat)
+table(cancervol)
+table(weight)
+table(age)
+table(benpros)
+table(vesinv)
+table(capspen)
+table(gleason)
+
+```
+
+```{r questionq}
+fit0<-lm(psa~cancervol+weight+benpros+as.factor(vesinv)+capspen+gleason)
+summary(fit0)
+```
+
+```{r b1}
+fit01<-update(fit0,.~.-as.factor(vesinv))
+anova(fit01,fit0)
+```
+so we can see the F-test value which is bigger than 0.05, we can't reject the $H_{0}$ that the vesian is not important.
+```{r question1b}
+#regress sale price on cancevol volume and weight
+fit1<-lm(psa~cancervol+weight)
+summary(fit1)
+```
+so from the summary of the regression on psa and cancervol and weight, we can get that the P-value for the cancervol estimator's significance is 1.08e-11 <0.05, which means that the estimator is needed, however the P-value for the weight estimator is 0.776>0.05, which means that the weight estimtor may not very significant.
+
+```{r question1c}
+#Add # age and #benpros and drop weight
+fit2<-update(fit1,.~.-weight)
+anova(fit2,fit1)
+```
+The F-test value is bigger than 0.05, so we can say that the weight estimator is unneeded.
+```{r question2}
+#Add  vesinv and capsen and drop age and benpros
+fit3<-update(fit2,.~.+age)
+summary(fit3)
+```
+From the summary given above, we can find that the P-value for age is bigger  than 0.929, so age may be unneeded.
+```{r question3}
+#drop vesinv and capspen and add gleason
+fit4<-update(fit3,.~.-age)
+anova(fit4,fit3)
+```
+from the summary we can find that the F value is bigger than 0.05, it means that the age is unneeded.
+```{r question4}
+fit5<-update(fit4,.~.+gleason)
+summary(fit5)
+```
+we can see the gleason 's p value is bigger than the 0.05, so the glrason may be unneeded.
+```{r l}
+fit6<-update(fit5,.~.-gleason)
+anova(fit6,fit5)
+```
+we can see that using F-test, the value is bigger than 0.05, so the gleason is unneeded.
+```{r question1d}
+# Residual plot
+
+plot(fitted(fit6), resid(fit6))
+abline(h=0)
+#QQ plot
+qqnorm(resid(fit6))
+qqline(resid(fit6))
+```
+1.In the Residual plot it has no change on vertical spread so it is good models,
+2.In the QQ norm plot,the normally assumption doesn't hold good, so we do some transform on the data.
+```{r questionn}
+#new qq plot after transformation,
+fitn<-update(fit6,log(psa)~.)
+qqnorm(resid(fitn))
+qqline(resid(fitn))
+```
+it hold the normal assumption good aftertransormation
+```{r test}
+#use the best model to predict on sample mean
+predictor<-mean(cancervol)
+#compute the prdiction using coeficients
+prediction<-fit6$coefficients[1]+fit6$coefficients[2]*predictor
+prediction
+```
